@@ -1,0 +1,37 @@
+﻿@page "/user_Register"
+@rendermode InteractiveServer
+@implements IDisposable
+
+<h3>Register</h3>
+
+<p>Enter your text to hash:</p>
+<input @bind="Username" placeholder="Enter Username" />
+<input @bind="Password" placeholder="Enter Password" />
+<button @onclick="Register">Register</button>
+
+@code {
+    // connection string
+    private ConnectDB.Connection _website_Connection;
+
+    // DB values
+    private string Username { get; set; }
+    private string Password { get; set; }
+
+    // when the site is opened it does that
+    protected override async Task OnInitializedAsync()
+    {
+        _website_Connection = new ConnectDB.Connection();
+    }
+
+    // this function saves the data
+    private void Register()
+    {
+        _website_Connection.Save_User_To_DB(Username, Password);
+    }
+
+    // this function will be used when we close the site to close the connection
+    public void Dispose()
+    {
+        _website_Connection?.Close_Connection();
+    }
+}

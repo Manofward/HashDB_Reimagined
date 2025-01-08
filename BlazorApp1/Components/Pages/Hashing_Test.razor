@@ -1,0 +1,82 @@
+﻿@page "/hashing"
+@rendermode InteractiveServer
+@implements IDisposable
+
+<h3>Hashing Test</h3>
+
+<!--html for Register of a User-->
+<h2>Register</h2>
+<p>Enter your text to hash:</p>
+<input @bind="Username" placeholder="Enter Username" />
+<input @bind="Password" placeholder="Enter Password" />
+<button @onclick="Register">Register</button>
+
+<p>@Result_Register</p>
+
+<br />
+<br />
+
+<!--html for Searching of a User-->
+<h2>DB Output</h2>
+<p>Enter the search Parameter</p>
+<input @bind="Search_ID" placeholder="Enter ID" />
+<input @bind="Search_Username" placeholder="Enter Username to search" />
+<button @onclick="LoadUsers">Search User</button>
+
+<ul>
+    @if (Users.Count == 0)
+    {
+        <li>No users found.</li>
+    }
+    else
+    {
+        @foreach (var user in Users)
+        {
+            <li>@user</li>
+        }
+    }
+</ul>
+
+@code {
+    // connection strings
+    private ConnectDB.Connection _website_Connection;
+
+    // Register values
+    private string Username { get; set; }
+    private string Password { get; set; }
+    private string Result_Register { get; set; }
+
+    // Search values
+    // for listing all the values of the db
+    private int? Search_ID { get; set; }
+    private string? Search_Username { get; set; }
+
+    private List<string> Users { get; set; } = new List<string>();
+
+    // when the site is opened it does that
+    protected override async Task OnInitializedAsync()
+    {
+        _website_Connection = new ConnectDB.Connection();
+        LoadUsers();
+    }
+
+    // this function saves the data
+    private void Register()
+    {
+        bool result = _website_Connection.Save_User_To_DB(Username, Password);
+
+        LoadUsers();
+    }
+
+    // this function loads the users with the function from Connection.cs
+    private void LoadUsers()
+    {
+        Users = _website_Connection.Read_Values(Search_ID, Search_Username);
+    }
+
+    // this function will be used when we close the site to close the connection
+    public void Dispose()
+    {
+        _website_Connection?.Close_Connection();
+    }
+}
