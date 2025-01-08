@@ -1,0 +1,7 @@
+﻿
+The store command is used to store your hashed values into a file
+
+store '"your hashed value"'
+
+you just copy your hashed value that you have from the cust command 
+into your command line as shown above. 

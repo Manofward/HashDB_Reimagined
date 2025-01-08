@@ -1,0 +1,8 @@
+﻿
+With the verify command you can authenticate yourself or more 
+like look up if your input was the same as saved as a hash in the file.
+
+verify "input value"
+
+important to know is that you dont give the input as a 
+hash rather ou give it as a normal word 

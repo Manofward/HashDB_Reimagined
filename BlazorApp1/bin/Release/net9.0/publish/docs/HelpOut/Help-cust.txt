@@ -1,0 +1,22 @@
+﻿
+You can do the follwing with this command:
+
+cust "input value"
+
+with cust you can hash an input you make
+for example: 
+	cust hallo
+
+with this you would hash hallo
+
+
+
+cust "input value" "number"
+
+with this command you say how long the hash should be
+it is Important to know that you should go only with whole numbers 
+that are bigger than 0 and not over 64 because your computer 
+could be forcefully shut off and potentialy damage it 
+
+i can't give you a clear example of how the hash looks because 
+it changes every time because of a salt that makes it random
