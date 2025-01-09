@@ -1,0 +1,38 @@
+﻿@page "/login"
+@rendermode InteractiveServer
+@inject ConnectDB.Connection _connection;
+
+<!--Login things-->
+
+<h2>Login</h2>
+<p>Enter your text to hash:</p>
+<input @bind="Login_Username" placeholder="Enter Username" />
+<input @bind="Login_Password" placeholder="Enter Password" />
+<button @onclick="Login">Login</button>
+
+<p>@Result_Login</p>
+
+@code {
+    // connection strings
+    private ConnectDB.Connection _website_Connection;
+    private Controller.Output_Controller _output_Control;
+
+    // Login Values
+    private string Login_Username { get; set; }
+    private string Login_Password { get; set; }
+    private string Result_Login { get; set; }
+
+    // when the site is opened it does that
+    protected override async Task OnInitializedAsync()
+    {
+        _website_Connection = _connection;
+        _output_Control = new Controller.Output_Controller();
+    }
+
+    private void Login()
+    {
+        bool result = _website_Connection.Try_Login(Login_Username, Login_Password);
+
+        Result_Login = _output_Control.Login_Output(result);
+    }
+}

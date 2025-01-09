@@ -1,6 +1,6 @@
 ﻿@page "/db_Output"
 @rendermode InteractiveServer
-@implements IDisposable
+@inject ConnectDB.Connection _connection;
 
 <h3>DB_Output</h3>
 
@@ -36,7 +36,7 @@
     // when the site is opened it does that
     protected override async Task OnInitializedAsync()
     {
-        _website_Connection = new ConnectDB.Connection();
+        _website_Connection = _connection;
         LoadUsers();
     }
 
@@ -44,11 +44,5 @@
     private void LoadUsers()
     {
         Users = _website_Connection.Read_Values(Search_ID, Search_Username);
-    }
-
-    // this function will be used when we close the site to close the connection
-    public void Dispose()
-    {
-        _website_Connection?.Close_Connection();
     }
 }

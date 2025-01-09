@@ -1,8 +1,8 @@
-﻿using DuckDB.NET.Data;
+﻿using BlazorApp1.Controller;
+using DuckDB.NET.Data;
 using Hashing.src;
 using Hashing.src.interfaces;
-using Microsoft.AspNetCore.Components;
-using System.Data.Entity.Core.Mapping;
+using Microsoft.AspNetCore.Http;
 
 namespace ConnectDB
 {
@@ -13,9 +13,9 @@ namespace ConnectDB
         public DuckDBConnection _connection;
 
         // giving the objects from above values
-        public Connection()
+        public Connection(ICust cust)
         {
-            _cust = new Cust();
+            _cust = cust;
             _connection = DB_Connection();
         }
 
@@ -41,20 +41,16 @@ namespace ConnectDB
             return Create_Connection;
         }
 
-        // function to close connection after closing
-        public void Close_Connection()
-        {
-            if (_connection != null && _connection.State == System.Data.ConnectionState.Open)
-            {
-                _connection.Close();
-            }
-        }
-
         // this function saves the user to the db
         public bool Save_User_To_DB(string username, string password)
         {
             try
             {
+                if (_connection.State != System.Data.ConnectionState.Open)
+                {
+                    _connection.Open();
+                }
+
                 using var command = _connection.CreateCommand();
 
                 // this is for incrementing the user_Id
@@ -63,7 +59,7 @@ namespace ConnectDB
 
                 // this is for creating the hash for the save later
                 string salt = _cust.Salt(32);
-                string hashed_Password = _cust.Hash("hello", salt, 32);
+                string hashed_Password = _cust.Hash(password, salt, 32);
 
                 // this is for inserting the salt and hashed password to the db
                 command.CommandText = "INSERT INTO Accounts (User_Id, Username, HashedPassword, Salt) VALUES ($user_Id, $username, $hashed_Password, $salt);";
@@ -87,6 +83,11 @@ namespace ConnectDB
         // this is the function to read the values from the db and give it out
         public List<string> Read_Values(int? user_Id = null, string? username = null)
         {
+            if (_connection.State != System.Data.ConnectionState.Open)
+            {
+                _connection.Open();
+            }
+
             var result = new List<string>();
             try
             {
@@ -129,6 +130,38 @@ namespace ConnectDB
             }
 
             return result;
+        }
+
+        public bool Try_Login(string username, string password)
+        {
+            if (_connection.State != System.Data.ConnectionState.Open)
+            {
+                _connection.Open();
+            }
+
+            using var command = _connection.CreateCommand();
+
+            // this is for inserting the salt and hashed password to the db
+            command.CommandText = "SELECT HashedPassword FROM Accounts WHERE Username = $username;";
+            command.Parameters.Clear();
+            command.Parameters.Add(new DuckDBParameter("username", username));
+
+            using var reader = command.ExecuteReader();
+            if (!reader.Read())
+            {
+                return false;
+            }
+
+            string stored_Hash = reader.GetString(0);
+
+            if (_cust.Verify(password, stored_Hash))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
