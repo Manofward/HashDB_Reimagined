@@ -10,13 +10,18 @@
 <button @onclick="Register">Register</button>
 
 @code {
-    [Inject]
     // connection string
-    private ConnectDB.Connection _website_Connection { get; set; }
+    private ConnectDB.Connection _website_Connection;
 
     // DB values
     private string Username { get; set; }
     private string Password { get; set; }
+
+    // when the site is opened it does that
+    protected override async Task OnInitializedAsync()
+    {
+        _website_Connection = new ConnectDB.Connection();
+    }
 
     // this function saves the data
     private void Register()

@@ -7,8 +7,7 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="user_Register">Register</a>
-            <a href="login_Page">Login</a>
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
         </div>
 
         <article class="content px-4">
@@ -22,22 +21,3 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
-
-@code 
-{
-    [Inject]
-    private IHttpContextAccessor HttpContextAccessor { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        var cookie = HttpContextAccessor.HttpContext.Request.Cookies["UserSession"];
-        if (!string.IsNullOrEmpty(cookie))
-        {
-            // Check session validity or extract user info as needed.
-        }
-        else
-        {
-            // Optionally handle the case where no cookie is present.
-        }
-    }
-}

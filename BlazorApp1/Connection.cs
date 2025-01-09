@@ -2,8 +2,7 @@
 using Hashing.src;
 using Hashing.src.interfaces;
 using Microsoft.AspNetCore.Components;
-using BlazorApp1.Controller;
-using System.Collections.Generic;
+using System.Data.Entity.Core.Mapping;
 
 namespace ConnectDB
 {
@@ -12,15 +11,12 @@ namespace ConnectDB
         // creating objects for later use
         private readonly ICust _cust;
         public DuckDBConnection _connection;
-        private readonly Cookie_Service _cookie_Service;
 
         // giving the objects from above values
-        public Connection(Cookie_Service cookie_Service)
+        public Connection()
         {
             _cust = new Cust();
             _connection = DB_Connection();
-            _cookie_Service = cookie_Service;
-
         }
 
         // This function opens the connection to the db
@@ -67,7 +63,7 @@ namespace ConnectDB
 
                 // this is for creating the hash for the save later
                 string salt = _cust.Salt(32);
-                string hashed_Password = _cust.Hash(password, salt, 32);
+                string hashed_Password = _cust.Hash("hello", salt, 32);
 
                 // this is for inserting the salt and hashed password to the db
                 command.CommandText = "INSERT INTO Accounts (User_Id, Username, HashedPassword, Salt) VALUES ($user_Id, $username, $hashed_Password, $salt);";
@@ -133,50 +129,6 @@ namespace ConnectDB
             }
 
             return result;
-        }
-
-        public bool Try_Login(string username, string password)
-        {
-            try
-            {
-                // Creating command object and making the query
-                using var command = _connection.CreateCommand();
-
-                command.CommandText = "SELECT HashedPassword FROM Accounts WHERE Username = $username;";
-
-                command.Parameters.Clear();
-                command.Parameters.Add(new DuckDBParameter("username", (object)username));
-
-                //starting the reader
-                using var reader = command.ExecuteReader();
-
-                // Reading the data of it
-                if (reader.Read())
-                {
-                    string stored_hash = reader.GetString(0);
-
-                    // Use the Verify method to check if the password is correct
-                    if (_cust.Verify(password, stored_hash))
-                    {
-                        _cookie_Service.Add_Cookie("UserSession", "SessionData", 1);
-
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("The following Error occured: " + ex.Message);
-                return false;
-            }
         }
     }
 }
