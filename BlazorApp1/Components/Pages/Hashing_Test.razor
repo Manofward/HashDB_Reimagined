@@ -16,6 +16,18 @@
 <br />
 <br />
 
+<!--Login Site -->
+<h2>Login</h2>
+<p>Enter your Login Values:</p>
+<input @bind="Login_Name" placeholder="Enter your Username" />
+<input @bind="Login_Password" placeholder="Enter your Password" />
+<button @onclick="Login">Login</button>
+
+<p>@Result_Login</p>
+
+<br />
+<br />
+
 <!--html for Searching of a User-->
 <h2>DB Output</h2>
 <p>Enter the search Parameter</p>
@@ -38,13 +50,20 @@
 </ul>
 
 @code {
-    // connection strings
-    private ConnectDB.Connection _website_Connection;
+    [Inject]
+    // connection string
+    private ConnectDB.Connection _website_Connection { get; set; }
+    private Controller.Output_Controller _output_Controller;
 
     // Register values
     private string Username { get; set; }
     private string Password { get; set; }
     private string Result_Register { get; set; }
+
+    // Login Values
+    private string Login_Name { get; set; }
+    private string Login_Password { get; set; }
+    private string Result_Login { get; set; }
 
     // Search values
     // for listing all the values of the db
@@ -56,7 +75,7 @@
     // when the site is opened it does that
     protected override async Task OnInitializedAsync()
     {
-        _website_Connection = new ConnectDB.Connection();
+        _output_Controller = new Controller.Output_Controller();
         LoadUsers();
     }
 
@@ -66,6 +85,13 @@
         bool result = _website_Connection.Save_User_To_DB(Username, Password);
 
         LoadUsers();
+    }
+
+    private void Login()
+    {
+        bool result = _website_Connection.Try_Login(Login_Name, Login_Password);
+
+        _output_Controller.Login_Output(result);
     }
 
     // this function loads the users with the function from Connection.cs
