@@ -1,6 +1,8 @@
 ﻿@page "/login"
 @rendermode InteractiveServer
-@inject ConnectDB.Connection _connection;
+@using BlazorApp1.Utilities
+@inject ConnectDB.Connection _connection
+@inject Cookie_Storage_Accessor Cookie_Storage_Accessor
 
 <!--Login things-->
 
@@ -29,10 +31,15 @@
         _output_Control = new Controller.Output_Controller();
     }
 
-    private void Login()
+    public async Task Login()
     {
         bool result = _website_Connection.Try_Login(Login_Username, Login_Password);
 
         Result_Login = _output_Control.Login_Output(result);
+
+        if (result)
+        {
+            await Cookie_Storage_Accessor.Set_Value_Async(Login_Username, result);
+        }
     }
 }

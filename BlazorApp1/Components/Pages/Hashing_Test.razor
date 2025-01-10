@@ -1,6 +1,8 @@
 ﻿@page "/hashing"
 @rendermode InteractiveServer
-@inject ConnectDB.Connection _connection;
+@using BlazorApp1.Utilities
+@inject ConnectDB.Connection _connection
+@inject Cookie_Storage_Accessor Cookie_Storage_Accessor
 
 <h3>Hashing Test</h3>
 
@@ -81,20 +83,27 @@
     }
 
     // this function saves the data
-    private void Register()
+    public async Task Register()
     {
         bool result = _website_Connection.Save_User_To_DB(Username, Password);
 
         Result_Register = _output_Control.Register_Output(result);
 
+        await Cookie_Storage_Accessor.Set_Value_Async(Username, result);
+
         LoadUsers();
     }
 
-    private void Login()
+    public async Task Login()
     {
         bool result = _website_Connection.Try_Login(Login_Username, Login_Password);
 
         Result_Login = _output_Control.Login_Output(result);
+
+        if (result)
+        {
+            await Cookie_Storage_Accessor.Set_Value_Async(Login_Username, result);
+        }
     }
 
     // this function loads the users with the function from Connection.cs

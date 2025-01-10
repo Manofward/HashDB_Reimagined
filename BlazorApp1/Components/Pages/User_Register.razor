@@ -1,6 +1,8 @@
 ﻿@page "/user_Register"
 @rendermode InteractiveServer
-@inject ConnectDB.Connection _connection;
+@using BlazorApp1.Utilities
+@inject ConnectDB.Connection _connection
+@inject Cookie_Storage_Accessor Cookie_Storage_Accessor
 
 <h3>Register</h3>
 
@@ -9,7 +11,7 @@
 <input @bind="Password" placeholder="Enter Password" />
 <button @onclick="Register">Register</button>
 
-<p>@Register_Result</p>
+<p>@Result_Register</p>
 
 @code {
     // connection string
@@ -19,7 +21,7 @@
     // DB values
     private string Username { get; set; }
     private string Password { get; set; }
-    private string Register_Result { get; set; }
+    private string Result_Register { get; set; }
 
     // when the site is opened it does that
     protected override async Task OnInitializedAsync()
@@ -29,10 +31,12 @@
     }
 
     // this function saves the data
-    private void Register()
+    public async Task Register()
     {
         bool result = _website_Connection.Save_User_To_DB(Username, Password);
 
-        Register_Result = _output_Control.Register_Output(result);
+        Result_Register = _output_Control.Register_Output(result);
+
+        await Cookie_Storage_Accessor.Set_Value_Async(Username, result);
     }
 }

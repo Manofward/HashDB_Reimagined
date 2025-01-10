@@ -1,0 +1,33 @@
+﻿@page "/logout_Page"
+@rendermode InteractiveServer
+@using BlazorApp1.Utilities
+@inject ConnectDB.Connection _connection
+@inject Cookie_Storage_Accessor Cookie_Storage_Accessor
+
+<h3>Hashing Test</h3>
+
+<!--html for Register of a User-->
+<h2>Register</h2>
+<p>Enter your text to hash:</p>
+<input @bind="Username" placeholder="Enter Username" />
+<button @onclick="Delete_Cookie">Register</button>
+
+
+@code {
+    // connection strings
+    private ConnectDB.Connection _website_Connection;
+
+    // Register values
+    private string Username { get; set; }
+
+    // when the site is opened it does that
+    protected override async Task OnInitializedAsync()
+    {
+        _website_Connection = _connection;
+    }
+
+    public async Task Delete_Cookie()
+    {
+        await Cookie_Storage_Accessor.Delete_Value_Async(Username);
+    }
+}
