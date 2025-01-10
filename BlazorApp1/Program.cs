@@ -3,8 +3,7 @@ using BlazorApp1.Controller;
 using ConnectDB;
 using Hashing.src.interfaces;
 using Hashing.src;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
+using BlazorApp1.Utilities;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +14,7 @@ builder.Services.AddRazorComponents()
 
 // Register the Connection as a scoped service
 builder.Services.AddScoped<ICust, Cust>();
-//builder.Services.AddHttpContextAccessor();
-//builder.Services.AddScoped<Cookie_Controller>();
+builder.Services.AddScoped<Cookie_Storage_Accessor>();
 builder.Services.AddScoped<Connection>();
 
 var app = builder.Build();

@@ -22,4 +22,8 @@
     <ProjectReference Include="..\lil_hash\Hashing\Hashing.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
 </Project>

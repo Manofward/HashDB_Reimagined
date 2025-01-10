@@ -2,7 +2,6 @@
 using DuckDB.NET.Data;
 using Hashing.src;
 using Hashing.src.interfaces;
-using Microsoft.AspNetCore.Http;
 
 namespace ConnectDB
 {
