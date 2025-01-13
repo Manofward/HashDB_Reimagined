@@ -151,8 +151,10 @@ namespace ConnectDB
                 return false;
             }
 
+            // this will get the string which we do want
             string stored_Hash = reader.GetString(0);
 
+            // this will give back if the password is the same as in the db
             if (_cust.Verify(password, stored_Hash))
             {
                 return true;
