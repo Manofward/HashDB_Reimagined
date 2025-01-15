@@ -1,0 +1,11 @@
+﻿You have the following commands for usage:
+cust					for hashing your input
+store "hashed input"	for storing your hashed input to a file
+verify "input"			to look if the stored hash is the same as your normal input
+
+You can also do 
+	'help command name'
+for a more detailed explanation of the command
+
+for more details for the usage or the documentation
+you should go to the readme file

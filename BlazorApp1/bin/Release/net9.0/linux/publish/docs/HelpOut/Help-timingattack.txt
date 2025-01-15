@@ -1,0 +1,9 @@
+﻿
+You can do the following with the timingattack function:
+
+You can test how long it takes to get the same guessed password
+that you did input
+
+with this command you can do it:
+
+timingattack "input value"
