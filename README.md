@@ -18,6 +18,9 @@ As of the time I am writing this there is only a Windows build and I want to add
 
 If you have any Issues or have a good Idea which can also be added to add more to learn for all feel free to make an Issue.
 
+> The two Factor Authentication doesn't work right now but I will work on it 
+
+
 ## Special things for Developers:
 
 ### Git Submodule Usage:
