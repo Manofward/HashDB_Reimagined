@@ -12,7 +12,15 @@
 <input @bind="Login_Password" placeholder="Enter Password" />
 <button @onclick="Login">Login</button>
 
+@if (IsTwoFactorRequired)
+{
+    <p>Enter the verification code sent to your email:</p>
+    <input @bind="VerificationCode" placeholder="Enter Verification Code" />
+    <button @onclick="Verify_Code">Verify Code</button>
+}
+
 <p>@Result_Login</p>
+
 
 @code {
     // connection strings
@@ -22,7 +30,9 @@
     // Login Values
     private string Login_Username { get; set; }
     private string Login_Password { get; set; }
+    private string VerificationCode { get; set; }
     private string Result_Login { get; set; }
+    private bool IsTwoFactorRequired { get; set; } = true;
 
     // when the site is opened it does that
     protected override async Task OnInitializedAsync()
@@ -33,13 +43,43 @@
 
     public async Task Login()
     {
-        bool result = _website_Connection.Try_Login(Login_Username, Login_Password);
-
-        Result_Login = _output_Control.Login_Output(result);
+        bool result = _website_Connection.Try_Login(Login_Username, Login_Password, null);
 
         if (result)
         {
+            // Login successful, set cookie
             await Cookie_Storage_Accessor.Set_Value_Async(Login_Username, result);
+            Result_Login = "Login successful!";
+        }
+        else
+        {
+            // Check if 2FA is required
+            if (result == false && IsTwoFactorRequired)
+            {
+                Result_Login = "Verification code required. Please check your email.";
+            }
+            else
+            {
+                Result_Login = "Invalid username or password.";
+            }
+        }
+    }
+
+    public async Task Verify_Code()
+    {
+        // Verify the provided verification code
+        bool is_Verified = _website_Connection.Try_Login(Login_Username, Login_Password, VerificationCode);
+
+        if (is_Verified)
+        {
+            // 2FA successful, set cookie
+            await Cookie_Storage_Accessor.Set_Value_Async(Login_Username, true);
+            Result_Login = "Login successful!";
+            IsTwoFactorRequired = false; // Reset the 2FA requirement
+        }
+        else
+        {
+            Result_Login = "Invalid verification code.";
         }
     }
 }

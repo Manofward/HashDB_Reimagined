@@ -8,7 +8,8 @@
 
 <p>Enter your text to hash:</p>
 <input @bind="Username" placeholder="Enter Username" />
-<input @bind="Password" placeholder="Enter Password" />
+<input type="password" @bind="Password" placeholder="Enter Password" />
+<input type="email" @bind="Email" placeholder="Enter Email address" />
 <button @onclick="Register">Register</button>
 
 <p>@Result_Register</p>
@@ -21,6 +22,7 @@
     // DB values
     private string Username { get; set; }
     private string Password { get; set; }
+    private string Email { get; set; }
     private string Result_Register { get; set; }
 
     // when the site is opened it does that
@@ -33,7 +35,7 @@
     // this function saves the data
     public async Task Register()
     {
-        bool result = _website_Connection.Save_User_To_DB(Username, Password);
+        bool result = _website_Connection.Save_User_To_DB(Username, Password, Email);
 
         Result_Register = _output_Control.Register_Output(result);
 
