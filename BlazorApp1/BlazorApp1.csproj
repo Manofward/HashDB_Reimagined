@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>AnyCPU;x64</Platforms>
+    <UserSecretsId>b220ba1f-7426-4923-816f-edadf980044c</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,8 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DuckDB.NET.Bindings.Full" Version="1.1.3" />
-    <PackageReference Include="DuckDB.NET.Data.Full" Version="1.1.3" />
+    <PackageReference Include="DuckDB.NET.Bindings.Full" Version="1.3.0" />
+    <PackageReference Include="DuckDB.NET.Data.Full" Version="1.3.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
   </ItemGroup>
 
   <ItemGroup>
