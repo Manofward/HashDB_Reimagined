@@ -1,7 +1,7 @@
 using BlazorApp1.Components;
 using BlazorApp1.Controller;
 using ConnectDB;
-using Hashing.src.interfaces;
+using Hashing.src.Hasher;
 using Hashing.src;
 using BlazorApp1.Utilities;
 

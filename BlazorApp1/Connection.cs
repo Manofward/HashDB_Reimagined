@@ -1,7 +1,6 @@
 ﻿using BlazorApp1.Controller;
 using DuckDB.NET.Data;
-using Hashing.src;
-using Hashing.src.interfaces;
+using Hashing.src.Hasher;
 using System;
 using System.Collections.Generic;
 using System.Net;
